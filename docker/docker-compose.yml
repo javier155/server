@@ -4,32 +4,76 @@ services:
 
   odk-mysql:
     image: mysql/mysql-server:5.7
+    #build:
+    #  network: host
     volumes:
       - ../initdb:/docker-entrypoint-initdb.d/
     environment:
         MYSQL_ROOT_PASSWORD: 123456
     restart: on-failure
-    command: mysqld --sql_mode="ONLY_FULL_GROUP_BY,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
+    command: mysqld --sql_mode="ONLY_FULL_GROUP_BY,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION" --bind-address=0.0.0.0
+    ports:
+      - 3306:3306
     networks:
-      - odk-network
+      lan:
+        ipv4_address: 192.168.1.25
+    #networks:
+    #  odk-network:
+    #    ipv4_address: 192.168.1.25
+    #networks:
+    #  - odk-network
+    #network_mode: "host"
 
   odk-server:
-    image: tiancaiamao/darkeden:latest
+    image: darkeden:latest
+    #dns:
+    #  - 192.168.1.11
     build:
+      network: host
       context: ..
       dockerfile: Dockerfile
     command: ["sleep","infinity"]
     ports:
-      - "9999:9999"
-      - "9998:9998"
-      - "9997:9997"
+      #- "9900:9900/tcp"
+      - "9999:9999/tcp"
+      - "9998:9998/tcp"
+      - "9997:9997/tcp"
       - "9997:9997/udp"
-    # volumes:
-    #   - ../bin/:/home/darkeden/vs/bin/
-    #   - ./conf/:/home/darkeden/vs/conf/
-    #   - ../data/:/home/darkeden/vs/data/
     networks:
-      - odk-network
+      lan:
+        ipv4_address: 192.168.1.25
+    #networks:
+    #  odk-network:
+    #    ipv4_address: 192.168.1.26
+    #./volumes:
+      #- ../bin/:/home/darkeden/vs/bin/
+      #- ./conf/:/home/darkeden/vs/conf/
+      #- ../data/:/home/darkeden/vs/data/
+    #networks:
+    #  - odk-network
+    #network_mode: "host"
 
+  #nginx-proxy:
+  #  image: nginx:latest
+  #  volumes:
+  #    - ./nginx.conf:/etc/nginx/nginx.conf
+  #  ports:
+  #    - "9999:9999"
+  #    - "9998:9998"
+  #    - "9997:9997/tcp"
+  #    - "9997:9997/udp"
+  #  networks:
+  #    - odk-network
+
+#networks:
+#  odk-network:
+#    driver: bridge
+#    ipam:
+#      driver: default
+#      config:
+#        - subnet: 192.168.1.0/24  # Especifica la subnet deseada
 networks:
-  odk-network:
+  lan:
+    driver: macvlan
+    driver_opts:
+      parent:

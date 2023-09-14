@@ -7,6 +7,7 @@ RUN apt update && apt install -y \
     libmysqlclient-dev \
     liblua5.1-dev \
     psmisc \
+    vim \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /home/darkeden

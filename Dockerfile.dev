@@ -15,4 +15,6 @@ RUN mkdir /home/darkeden
 RUN mkdir /home/darkeden/vs
 RUN mkdir /home/darkeden/vs/src
 
+COPY src /home/darkeden/vs/src/
+
 WORKDIR /home/darkeden/vs/src
