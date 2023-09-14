@@ -41,7 +41,7 @@ services:
       - "9997:9997/udp"
     networks:
       lan:
-        ipv4_address: 192.168.1.25
+        ipv4_address: 192.168.1.26
     #networks:
     #  odk-network:
     #    ipv4_address: 192.168.1.26
@@ -76,4 +76,8 @@ networks:
   lan:
     driver: macvlan
     driver_opts:
-      parent:
+      parent: enp0s3
+    ipam:
+      config:
+        - subnet: "192.168.1.0/24"
+          gateway: "192.168.1.1"
