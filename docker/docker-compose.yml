@@ -33,12 +33,12 @@ services:
       context: ..
       dockerfile: Dockerfile
     command: ["sleep","infinity"]
-    ports:
+    #ports:
       #- "9900:9900/tcp"
-      - "9999:9999/tcp"
-      - "9998:9998/tcp"
-      - "9997:9997/tcp"
-      - "9997:9997/udp"
+      #- "9999:9999/tcp"
+      #- "9998:9998/tcp"
+      #- "9997:9997/tcp"
+      #- "9997:9997/udp"
     networks:
       lan:
         ipv4_address: 192.168.1.26
@@ -76,7 +76,7 @@ networks:
   lan:
     driver: macvlan
     driver_opts:
-      parent: enp0s3
+      parent: enp0s17
     ipam:
       config:
         - subnet: "192.168.1.0/24"
